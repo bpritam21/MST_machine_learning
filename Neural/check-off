@@ -1,0 +1,50 @@
+void make_system(){
+
+	initialize_theta();
+	make_z();
+	initialize_z();
+	make_a();
+	initialize_del();
+	make_DELTA();
+	initialize_D();
+	old_cost = 99999999.9999;
+}
+
+int theta_layers num_layers-1;
+
+int last_layer = theta_layers-1;
+
+void initialize_theta(){
+	theta = (double***) malloc((theta_layers)*sizeof(double**));
+	int limit;
+
+	for(int l=0; l<theta_layers; l++){
+		
+		if(l == last_layer)
+			limit = node_count[l+1];
+		else
+			limit = node_count[l+1] -1;
+
+		theta[l] = (double**) malloc((limit)*sizeof(double*));
+
+		for(int i=0; i<limit; i++){
+			theta[l][i] = (double*) calloc(node_count[l],sizeof(double));
+		}
+	}
+
+	for(int l=0; l<theta_layers; l++){
+
+		if(l==last_layer)
+			limit = node_count[l+1];
+		else
+			limit = node_count[l+1]-1;
+
+		for(int i=0; i<limit; i++){
+			for(int j=0; j<node_count[l]; j++){
+				do{
+					theta[l][i][j] = RANDOM_FRACTION;
+				}while(theta[l][i][j] < 0.1 || theta[l][i][j] > 0.9);
+			}
+		}
+	}
+}
